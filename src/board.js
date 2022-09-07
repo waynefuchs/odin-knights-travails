@@ -5,32 +5,47 @@ class Board {
   constructor(rank = 8, file = 8) {
     this.rank = rank;
     this.file = file;
-    this._generateMap(rank, file);
   }
 
-  _generateMap(rank, file) {
-    let map = {};
-    let count = 0;
-    for (let x = 0; x < rank; x++) {
-      for (let y = 0; y < file; y++, count += 1) {
-        const arr = [x, y];
-        map[arr] = count;
-      }
-    }
-    this.map = map;
+  /**
+   * Determines whether coordinates are valid
+   *
+   * @param {Array} coordinates
+   *    [rank, file]
+   *
+   * @return
+   *    `true` or `false`
+   */
+  isValidTile(coordinates) {
+    const [rank, file] = coordinates;
+    return rank < this.rank && rank >= 0 && file < this.file && file >= 0;
   }
 
   /**
    * Returns the square id.
-   * 
-   * @param {Number} array
+   *
+   * @param {Array} coordinates
    *    [rank, file]
-   * 
+   *
    * @return
    *    The integer value of the specified board square.
    */
-  getId(array) {
-    return array in this.map ? this.map[array] : false;
+  getId(coordinates) {
+    const [rank, file] = coordinates;
+    return this.isValidTile(coordinates) ? rank * this.rank + file : false;
+  }
+
+  /**
+   * Calculate coordinates from id
+   *
+   * @param {Number} id
+   *    The integer tile id value
+   *
+   * @return
+   *    an array containing [rank, file]
+   */
+  getCoordinates(id) {
+    
   }
 }
 
