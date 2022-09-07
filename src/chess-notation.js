@@ -19,10 +19,8 @@ const validPieces = {
 };
 
 const fromChessNotation = (str) => {
-  if (!(str.length >= 2 && str.length <= 3))
-    throw new Error(`Incorrect string length (${str})`);
   if (!/[KQBNR]{0,1}[a-h]{1}[1-8]{1}$/.test(str))
-    throw new Error(`Invalid chess notation: Failed regex test (${str})`);
+    throw new Error(`Invalid chess notation (${str})`);
   if (str.length === 2) str.unshift("♟️");
   const [piece, file, rank] = str.split("");
   if (!Object.keys(boardFile).some((l) => l === file))
