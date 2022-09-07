@@ -45,7 +45,9 @@ class Board {
    *    an array containing [rank, file]
    */
   getCoordinates(id) {
-    
+    const rank = Math.floor(id / this.rank);
+    const file = id % this.rank;
+    return this.isValidTile([rank, file]) ? [rank, file] : false;
   }
 }
 
