@@ -1,23 +1,23 @@
 class Board {
-  rank;
   file;
+  rank;
   map;
   constructor(rank = 8, file = 8) {
-    this.rank = rank;
     this.file = file;
+    this.rank = rank;
   }
 
   /**
    * Determines whether coordinates are valid
    *
    * @param {Array} coordinates
-   *    [rank, file]
+   *    [file, rank]
    *
    * @return
    *    `true` or `false`
    */
   isValidTile(coordinates) {
-    const [rank, file] = coordinates;
+    const [file, rank] = coordinates;
     return rank < this.rank && rank >= 0 && file < this.file && file >= 0;
   }
 
@@ -25,14 +25,14 @@ class Board {
    * Returns the square id.
    *
    * @param {Array} coordinates
-   *    [rank, file]
+   *    [file, rank]
    *
    * @return
    *    The integer value of the specified board square.
    */
   getId(coordinates) {
-    const [rank, file] = coordinates;
-    return this.isValidTile(coordinates) ? rank * this.rank + file : false;
+    const [file, rank] = coordinates;
+    return this.isValidTile(coordinates) ? file * this.file + rank : false;
   }
 
   /**
@@ -45,9 +45,9 @@ class Board {
    *    an array containing [rank, file]
    */
   getCoordinates(id) {
-    const rank = Math.floor(id / this.rank);
     const file = id % this.rank;
-    return this.isValidTile([rank, file]) ? [rank, file] : false;
+    const rank = Math.floor(id / this.rank);
+    return this.isValidTile([file, rank]) ? [file, rank] : false;
   }
 }
 

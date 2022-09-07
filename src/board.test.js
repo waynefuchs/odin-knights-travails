@@ -1,4 +1,4 @@
-const Board = require("./board.js");
+const Board = require("./board");
 
 let board;
 
@@ -43,4 +43,10 @@ test("Test retrieving valid tile IDs", () => {
 
 test("Test turning IDs into coordinates", () => {
     expect(board.getCoordinates(0)).toStrictEqual([0,0]);
+    expect(board.getCoordinates(27)).toStrictEqual([3,3]);
+    expect(board.getCoordinates(32)).toStrictEqual([0,4]);
+    expect(board.getCoordinates(55)).toStrictEqual([7,6]);
+    expect(board.getCoordinates(63)).toStrictEqual([7,7]);
+    expect(board.getCoordinates(-1)).toBe(false);
+    expect(board.getCoordinates(64)).toBe(false);
 })
