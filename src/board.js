@@ -1,6 +1,4 @@
 class Board {
-  // Rank: White on 1/2, Black on 7/8
-  // File: a->h (1-8)
   rank;
   file;
   map;
@@ -22,7 +20,18 @@ class Board {
     this.map = map;
   }
 
-  getTileId(arr) {}
+  /**
+   * Returns the square id.
+   * 
+   * @param {Number} array
+   *    [rank, file]
+   * 
+   * @return
+   *    The integer value of the specified board square.
+   */
+  getId(array) {
+    return array in this.map ? this.map[array] : false;
+  }
 }
 
 module.exports = Board;
