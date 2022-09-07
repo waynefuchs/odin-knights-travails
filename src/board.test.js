@@ -39,3 +39,7 @@ test("Test retrieving valid tile IDs", () => {
   expect(board.getId([6,6])).toBe(54);
   expect(board.getId([7,7])).toBe(63);
 });
+
+test("Test turning IDs into coordinates", () => {
+    expect(board.getCoordinates(0).toBe([0,0]));
+})
