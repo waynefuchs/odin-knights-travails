@@ -1,32 +1,32 @@
+const Coordinate = require("./coordinate");
 const Board = require("./board");
 const board = new Board();
 
 const knightMoves = (start, end) => {};
 
 /**
- * Determines whether coordinates are valid
+ * Calculate all knight moves that would result in a valid ending position
  *
- * @param {Array} coordinates
- *    [file, rank]
+ * @param {Coordinate} coordinates
+ *    Coordinate Object
  *
- * @return
- *    `true` or `false`
+ * @return [..., Coordinate]
+ *    A list of Coordinates valid knight moves
  */
 const getAllPossibleMoves = (start) => {
-  const possibleOffsets = [
-    [1, 2],
-    [2, -1],
-    [-1, -2],
-    [-2, 1],
-    [-1, 2],
-    [2, 1],
-    [1, -2],
-    [-2, -1],
+  const knightOffsets = [
+    new Coordinate(1, 2),
+    new Coordinate(2, -1),
+    new Coordinate(-1, -2),
+    new Coordinate(-2, 1),
+    new Coordinate(-1, 2),
+    new Coordinate(2, 1),
+    new Coordinate(1, -2),
+    new Coordinate(-2, -1),
   ];
-
-  return possibleOffsets
-    .map((c) => [c[0] + start[0], c[1] + start[1]]) // add start offset
-    .filter((c) => board.isValidTile(c)); // filter invalid final positions
+  return knightOffsets
+    .map((c) => new Coordinate(c.file + start.file, c.rank + start.rank)) 
+    .filter((c) => board.isValidTile(c));
 };
 
 module.exports = { getAllPossibleMoves };

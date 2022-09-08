@@ -1,4 +1,4 @@
-const {fromChessNotation} = require('./chess-notation')
+const {fromChessNotation} = require('../chess-notation')
 
 test('Not enough information throws an error', () => {
     expect(() => fromChessNotation('N')).toThrow('Invalid chess notation (N)');
@@ -27,13 +27,3 @@ test('Valid move results in correct response', () => {
     expect(obj.rank).toBe(8);
     expect(obj.y).toBe(7);
 })
-
-
-
-// try {
-//     console.log(fromChessNotation('Ng8'));
-//     console.log(fromChessNotation('Ng9'));
-//     console.log(fromChessNotation('Ni7'));
-// } catch (error) {
-//     console.error(error.message);
-// }
