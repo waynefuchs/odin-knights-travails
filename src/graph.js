@@ -1,10 +1,16 @@
-class GraphNode {
-    coordinate;
-    children;
-    parent;
-    constructor(parent, coordinate) {
-        this.parent= parent;
-        this.coordinate = coordinate;
-        this.children = [];
-    }
+const GraphNode = require("./graph-node");
+
+class Graph {
+  root;
+  moves;
+  solvedCoordinates;
+  constructor(coordinate) {}
+
+  build;
+
+  contains(coordinate) {
+    this.solvedCoordinates.some(
+      (c) => c.file == coordinate.file && c.rank == coordinate.rank
+    );
+  }
 }
