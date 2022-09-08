@@ -1,12 +1,17 @@
+const Coordinate = require("./coordinate");
 const GraphNode = require("./graph-node");
 
 class Graph {
   root;
   moves;
   solvedCoordinates;
-  constructor(coordinate) {}
+  constructor(coordinate) {
+    // this.root = 
+  }
 
-  build;
+  buildGraph() {
+
+  }
 
   contains(coordinate) {
     this.solvedCoordinates.some(

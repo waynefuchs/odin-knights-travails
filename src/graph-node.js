@@ -1,18 +1,21 @@
 class GraphNode {
-    piece;
-    coordinate;
-    childCoordinates;
-    depth;
-    parent;
-    constructor(parent, coordinate, piece) {
-        this.piece = piece;
-        this.coordinate = coordinate;
-        this.depth = null;
-        this.parent= parent;
-        this.childCoordinates = piece.getAllValidMoves(coordinate);
-    }
+  // If, after complete graph construction, this node contains coordinates that 
+  // aren't also in the `childLinks` array, then this is a non-optimal solution
+  childCoordinates; // All the coordinates you can get to
+  edges; // Links that make sense at the graph level
 
-    addChild()
+  piece;
+  coordinate;
+  depth;
+  parent;
+  constructor(board, coordinate, piece, parent = null) {
+    this.piece = piece;
+    this.coordinate = coordinate;
+    this.depth = null;
+    this.parent = parent;
+    this.childCoordinates = piece.getAllPossibleMoves(board, coordinate);
+    this.edges = [];
+  }
 }
 
-module.exports = GrpahNode;
+module.exports = GraphNode;
