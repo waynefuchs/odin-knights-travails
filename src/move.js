@@ -2,14 +2,14 @@ class Move {
   from;
   toList;
   constructor(from, to) {
-    if (to.constructor !== Array)
+    if (to === undefined || to.constructor !== Array)
       throw "Move.constructor(from, to): `to` must be an array.";
     this.from = from;
     this.toList = to;
   }
 
-  fromCoordinateEquals(from) {
-    return from.file === this.from.file && from.rank === this.from.rank;
+  fromEquals(coord) {
+    return coord.file === this.from.file && coord.rank === this.from.rank;
   }
 
   addTo(to) {

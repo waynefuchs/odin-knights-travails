@@ -13,22 +13,50 @@ Iterate through each square that can be reached on this turn
 */
 
 class Graph {
-  root;
+  board;
+  piece;
   turns;
+  squares;
 
-  constructor(board, initialCoordinate) {
+  constructor(board, piece, initialCoordinate) {
+    this.board = board;
+    this.piece = piece;
     this.turns = [];
+    this.squares = [];
 
+    // Set up the "First Turn" (Turn 0)
     let thisTurn = new Turn(this);
-    const possibleMoves = new Move(
-      initialCoordinate,
-      Knight.getAllPossibleMoves(board, initialCoordinate)
+    thisTurn.addMove(
+      new Move(
+        initialCoordinate,
+        this.piece.getAllPossibleMoves(this.board, initialCoordinate)
+      )
     );
-    thisTurn.addMove(possibleMoves);
-    thisTurn.process();
+
+    // Subsequent turns are just a single call
+    while (this.addTurn(thisTurn)) {
+      thisTurn = thisTurn.process(this.board, this.piece);
+    }
+
+    console.log(JSON.stringify(this));
   }
 
+  addTurn(turn) {
+    let newSquaresAdded = false;
+    turn.moves.forEach((move) => {
+      let squareVisited = this.squares.some((square) => {
+
+        return move.fromEquals(square) ? true : false;
+      });
+      if (!squareVisited) {
+        this.squares.push(move.from);
+        newSquaresAdded = true;
+      }
+    });
+    this.turns.push(turn);
+    return newSquaresAdded;
+  }
 }
 
 const b = new Board();
-const g = new Graph(b, new Coordinate(0, 0));
+const g = new Graph(b, Knight, new Coordinate(0, 0));
