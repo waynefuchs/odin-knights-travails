@@ -1,6 +1,6 @@
 class Move {
   square;
-  destinations; // Destination Dictionary
+  destinations;
 
   constructor(from, destinations = []) {
     if (destinations === undefined || destinations.constructor !== Array)
@@ -30,9 +30,6 @@ class Move {
       const squareString = destination.toString();
       this.destinations[squareString] = destination;
     }
-    // else {
-    //   console.log(`Attempted to add duplicate destination ${this.square}:${destination.toString()}`);
-    // }
   }
 }
 

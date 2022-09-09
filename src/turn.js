@@ -36,7 +36,6 @@ class Turn {
   }
 
   containsMoveTo(dest) {
-    // console.log(JSON.stringify([...Object.values(this.moves)]));
     return [...Object.values(this.moves)].some((c) =>
       c.containsDestination(dest)
     );
@@ -53,7 +52,6 @@ class Turn {
     Object.values(this.moves).forEach((move) => {
       returnDestinations = returnDestinations.concat(move.getDestinations());
     });
-    // Make unique
     return [...new Set(returnDestinations)];
   }
 
