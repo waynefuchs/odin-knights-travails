@@ -55,10 +55,6 @@ class Turn {
     return [...new Set(returnDestinations)];
   }
 
-  toString() {
-    return JSON.stringify(this);
-  }
-
   containsDestination(to) {
     return this.moves.some((move) => move.toListContains(to));
   }
