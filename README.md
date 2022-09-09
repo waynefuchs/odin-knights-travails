@@ -2,4 +2,5 @@
 
 For The Odin Project "Kinghts Travails" project.
 
-[Chess Notation](https://www.ichess.net/blog/chess-notation/)
+* [Algebraic Notation](https://en.wikipedia.org/wiki/Algebraic_notation_(chess))
+* [Chess Notation](https://www.ichess.net/blog/chess-notation/)
