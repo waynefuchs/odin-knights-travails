@@ -1,62 +1,63 @@
-const Coordinate = require("./coordinate");
-const Knight = require("./knight");
-const Board = require("./board");
 const Move = require("./move");
 const Turn = require("./turn");
 
-/*
-
-Iterate through each square that can be reached on this turn
-  check if 
-
-
-*/
-
 class Graph {
-  board;
-  piece;
   turns;
-  squares;
+  squaresVisited;
 
   constructor(board, piece, initialCoordinate) {
-    this.board = board;
-    this.piece = piece;
     this.turns = [];
-    this.squares = [];
+    this.squaresVisited = [];
 
     // Set up the "First Turn" (Turn 0)
     let thisTurn = new Turn(this);
     thisTurn.addMove(
       new Move(
         initialCoordinate,
-        this.piece.getAllPossibleMoves(this.board, initialCoordinate)
+        piece.getAllPossibleMoves(board, initialCoordinate)
       )
     );
 
     // Subsequent turns are just a single call
     while (this.addTurn(thisTurn)) {
-      thisTurn = thisTurn.process(this.board, this.piece);
+      thisTurn = thisTurn.process(board, piece);
     }
-
-    console.log(JSON.stringify(this));
   }
 
   addTurn(turn) {
     let newSquaresAdded = false;
     turn.moves.forEach((move) => {
-      let squareVisited = this.squares.some((square) => {
-
+      let squareVisited = this.squaresVisited.some((square) => {
         return move.fromEquals(square) ? true : false;
       });
       if (!squareVisited) {
-        this.squares.push(move.from);
+        this.squaresVisited.push(move.from);
         newSquaresAdded = true;
       }
     });
     this.turns.push(turn);
     return newSquaresAdded;
   }
+
+  findShortest(destination) {
+    let index = 0;
+    for(; index < this.turns.length; index++) {
+      if(this.turns[index].containsDestination(destination)) {
+        console.log(`Found at: ${index}`);
+        this.getReturnPath(destination, index);
+        break;
+      }
+    }
+    console.log(`Exiting at: ${index}`);
+  }
+
+  getReturnPath(destination, index) {
+    if(index < 0) return "FIN";
+    const ele = this.turns[index].getReturnCoordinates(destination);
+    ele.forEach(c => this.getReturnPath(c, index - 1));
+    console.log(index + ':' + JSON.stringify(ele));
+  }
+
 }
 
-const b = new Board();
-const g = new Graph(b, Knight, new Coordinate(0, 0));
+module.exports = Graph;

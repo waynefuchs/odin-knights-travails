@@ -13,11 +13,11 @@ class Move {
   }
 
   addTo(to) {
-    if (!this.hasTo(to)) this.toList.push(to);
+    if (!this.toListContains(to)) this.toList.push(to);
   }
 
-  hasTo(to) {
-    return this.toList.includes(
+  toListContains(to) {
+    return this.toList.some(
       (coord) => coord.file === to.file && coord.rank === to.rank
     );
   }

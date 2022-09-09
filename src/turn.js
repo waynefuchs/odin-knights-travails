@@ -37,6 +37,20 @@ class Turn {
   toString() {
     return JSON.stringify(this);
   }
+
+  containsDestination(to) {
+    return this.moves.some(move => move.toListContains(to));
+  }
+
+  getReturnCoordinates(to) {
+    const matchingMoves = this.moves.filter(move => move.toListContains(to));
+    const matchingCoords = matchingMoves.map(move => move.from);
+    const uniqueCoords = [];
+    matchingCoords.forEach(c => {
+      if(!uniqueCoords.some(uc => uc.equals(c))) uniqueCoords.push(c);
+    });
+    return uniqueCoords;
+  }
 }
 
 module.exports = Turn;

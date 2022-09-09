@@ -13,7 +13,6 @@ class Coordinate {
   }
 
   toJSON() {
-    // return `[${this.file},${this.rank}]`;
     return cn.getSquareName(this);
   }
   // valueOf() {
