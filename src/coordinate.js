@@ -1,4 +1,4 @@
-const cn = require("./chess-notation");
+const ChessNotation = require("./chess-notation");
 
 class Coordinate {
   file;
@@ -12,12 +12,9 @@ class Coordinate {
     return this.file === coordinate.file && this.rank === coordinate.rank;
   }
 
-  toJSON() {
-    return cn.getSquareName(this);
-  }
-  // valueOf() {
-  //   return Number((this.file) + (this.rank * 8));
-  // }
+  toJSON = () => ChessNotation.getSquareName(this);
+  toString = this.toJSON;
+  valueOf = this.toJSON;
 }
 
 module.exports = Coordinate;

@@ -1,12 +1,17 @@
 const Coordinate = require("./coordinate");
 
+const minimum = 3;
+const maximum = 26;
+
 const isInRange = (n, max) => n < max && n >= 0;
 
 class Board {
   file;
   rank;
   map;
-  constructor(rank = 8, file = 8) {
+  constructor(file = 8, rank = 8) {
+    if (rank < minimum || file < minimum || rank > maximum || file > maximum)
+      throw new Error(`Board size ${file} x ${rank} is out of range`);
     this.file = file;
     this.rank = rank;
   }

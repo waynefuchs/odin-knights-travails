@@ -4,60 +4,72 @@ const Turn = require("./turn");
 class Graph {
   turns;
   squaresVisited;
+  initialCoordinate;
 
   constructor(board, piece, initialCoordinate) {
     this.turns = [];
-    this.squaresVisited = [];
+    this.squaresVisited = {};
+    this.initialCoordinate = initialCoordinate;
 
     // Set up the "First Turn" (Turn 0)
-    let thisTurn = new Turn(this);
-    thisTurn.addMove(
-      new Move(
-        initialCoordinate,
-        piece.getAllPossibleMoves(board, initialCoordinate)
-      )
-    );
+    this.squaresVisited[initialCoordinate.toString()] = initialCoordinate;
+    let turn = new Turn();
+    let possibleMoves = piece.getAllPossibleMoves(board, initialCoordinate);
+    turn.addMoves(initialCoordinate, possibleMoves);
 
-    // Subsequent turns are just a single call
-    while (this.addTurn(thisTurn)) {
-      thisTurn = thisTurn.process(board, piece);
-    }
-  }
+    let newSquares;
+    newSquares = this.pushTurnToStack(turn);
 
-  addTurn(turn) {
-    let newSquaresAdded = false;
-    turn.moves.forEach((move) => {
-      let squareVisited = this.squaresVisited.some((square) => {
-        return move.fromEquals(square) ? true : false;
+    // Go until no new squares are visited
+    do {
+      const startingSquares = turn.getAllPossibleDestinations();
+      turn = new Turn(this.squaresVisited);
+      startingSquares.forEach((source) => {
+        this.updateTurn(turn, board, piece, source);
       });
-      if (!squareVisited) {
-        this.squaresVisited.push(move.from);
-        newSquaresAdded = true;
-      }
-    });
-    this.turns.push(turn);
-    return newSquaresAdded;
+      newSquares = this.pushTurnToStack(turn);
+    } while (newSquares.length > 0);
   }
 
-  findShortest(destination) {
-    let index = 0;
-    for(; index < this.turns.length; index++) {
-      if(this.turns[index].containsDestination(destination)) {
-        console.log(`Found at: ${index}`);
-        this.getReturnPath(destination, index);
-        break;
+  updateTurn(turn, board, piece, source) {
+    const possibleMoves = piece.getAllPossibleMoves(board, source);
+    turn.addMoves(source, possibleMoves);
+  }
+
+  pushTurnToStack(turn) {
+    const newSquares = this.visited(turn.getAllPossibleDestinations());
+    this.turns.push(turn);
+    return newSquares;
+  }
+
+  visited(squares) {
+    const newSquares = squares.filter(
+      (square) => {
+        if (square.toString() in this.squaresVisited) return false;
+        this.squaresVisited[square.toString()] = square;
+        return true;
+      });
+    return newSquares;
+  }
+
+  findPathTo(square) {
+    let index;
+    for(index = 0; index < this.turns.length; index += 1) {
+      if(this.turns[index].containsMoveTo(square)) {
+        const move = this.turns[index].getMoveTo(square);
+        const path = [square.toString()].concat(this.pathfind(move, index));
+        path.reverse();
+        return path;
       }
     }
-    console.log(`Exiting at: ${index}`);
+    throw new Error(`Failed to find ${square}`);
   }
 
-  getReturnPath(destination, index) {
-    if(index < 0) return "FIN";
-    const ele = this.turns[index].getReturnCoordinates(destination);
-    ele.forEach(c => this.getReturnPath(c, index - 1));
-    console.log(index + ':' + JSON.stringify(ele));
+  pathfind(move, index) {
+    if(index <= 0) return this.initialCoordinate.toString();
+    const nextMove = this.turns[index-1].getMoveTo(move.square);
+    return [move.square.toString()].concat(this.pathfind(nextMove, index - 1));
   }
-
 }
 
 module.exports = Graph;

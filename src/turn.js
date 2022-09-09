@@ -4,34 +4,57 @@ const Move = require("./move");
 
 class Turn {
   moves;
-  constructor() {
-    this.moves = [];
+
+  // TODO: Implement this to prevent infinitely cycling between the same squares
+  invalidSquares;
+
+  constructor(invalidSquares = []) {
+    this.invalidSquares = invalidSquares;
+    this.moves = {};
   }
 
-  process(board, piece) {
-    const nextTurn = new Turn();
-    this.moves.forEach((move) => {
-      move.toList.forEach((coord) => {
-        nextTurn.addMove(
-          new Move(coord, piece.getAllPossibleMoves(board, coord))
-        );
-      });
+  addMoves(source, destinations) {
+    destinations.forEach((destination) => {
+      this.addMove(source, destination);
     });
-
-    return nextTurn;
   }
 
-  addMove(move) {
-    // TODO: Check if
-    this.moves.push(move);
+  addMove(source, destination) {
+    if (destination.toString() in this.invalidSquares) {
+      return;
+    }
+    const move = this.getMove(source).addDestination(destination);
   }
 
-  containsMoveFrom(from) {
-    return this.moves.includes((c) => from.equals(c));
+  getMove(source) {
+    if (source.toString() in this.moves) {
+      return this.moves[source.toString()];
+    }
+
+    this.moves[source.toString()] = new Move(source);
+    return this.moves[source.toString()];
   }
 
-  getMoveFrom(from) {
-    return this.moves.find((c) => from.equals(c));
+  containsMoveTo(dest) {
+    // console.log(JSON.stringify([...Object.values(this.moves)]));
+    return [...Object.values(this.moves)].some((c) =>
+      c.containsDestination(dest)
+    );
+  }
+
+  getMoveTo(dest) {
+    return [...Object.values(this.moves)].find((c) =>
+      c.containsDestination(dest) ? c : false
+    );
+  }
+
+  getAllPossibleDestinations() {
+    let returnDestinations = [];
+    Object.values(this.moves).forEach((move) => {
+      returnDestinations = returnDestinations.concat(move.getDestinations());
+    });
+    // Make unique
+    return [...new Set(returnDestinations)];
   }
 
   toString() {
@@ -39,15 +62,15 @@ class Turn {
   }
 
   containsDestination(to) {
-    return this.moves.some(move => move.toListContains(to));
+    return this.moves.some((move) => move.toListContains(to));
   }
 
   getReturnCoordinates(to) {
-    const matchingMoves = this.moves.filter(move => move.toListContains(to));
-    const matchingCoords = matchingMoves.map(move => move.from);
+    const matchingMoves = this.moves.filter((move) => move.toListContains(to));
+    const matchingCoords = matchingMoves.map((move) => move.from);
     const uniqueCoords = [];
-    matchingCoords.forEach(c => {
-      if(!uniqueCoords.some(uc => uc.equals(c))) uniqueCoords.push(c);
+    matchingCoords.forEach((c) => {
+      if (!uniqueCoords.some((uc) => uc.equals(c))) uniqueCoords.push(c);
     });
     return uniqueCoords;
   }
